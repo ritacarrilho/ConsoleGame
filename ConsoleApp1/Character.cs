@@ -2,19 +2,23 @@ namespace ConsoleApp1;
 
 public class Character
 {
-    private string name;
-    private int level;
-    private int currentHp;
-    private int maxHp;
-    private int currentXp;
-    private int targetXp;
-    private int attack;
-    private int defense;
+    private Classes characterClass;
+    private Statistics characterStatistics;
+    public string name;
+    public int level;
+    public int currentHp;
+    public int maxHp;
+    public int currentXp;
+    public int targetXp;
+    public int attack;
+    public int defense;
 
 
-    public Character(string name, int level, int currentHp, int maxHp, int currentXp, int tagetXp, int attack, int defense)
+    public Character(Classes characterClass, int level, int currentHp, int maxHp, int currentXp, int tagetXp, int attack, int defense)
     {
-        this.name = name;
+        this.characterClass = characterClass;
+        name = characterClass.ToString();
+        characterStatistics = new Statistics(this.characterClass);
         this.level = level;
         this.currentHp = currentHp;
         this.maxHp = maxHp;
@@ -23,41 +27,16 @@ public class Character
         this.attack = attack;
         this.defense = defense;
     }
-
-    public string Name()
-    {
-        return name;
-    }
     
-    public int Level()
-    {
-        return level;
-    }
-    
-    public int CurrentXp()
-    {
-        return currentXp;
-    }
-    
-    public int TargetXp()
-    {
-        return targetXp;
-    }
-    
-    public void RestoreHp()
-    {
-        currentHp = maxHp;
-    }
-
     public void IncreaseHealth(int value)
     {
         /* if (currentHp + value < maxHp) { currentHp += value; } else { currentHp = maxHp; } */
         currentHp = Math.Min(currentHp + value, maxHp);
     }
 
-    public void DecreaseHp(int value)
+    public void RestoreHp()
     {
-        currentHp = Math.Max(currentHp - value, 0);
+        currentHp = maxHp;
     }
 
     public void DefineTargetXp()
@@ -68,6 +47,11 @@ public class Character
     public void LevelUp()
     {
         level += 1;
+        characterStatistics.LevelUpStatistic(StatisticType.Hp, ref maxHp);
+        RestoreHp();
+        characterStatistics.LevelUpStatistic(StatisticType.Attack, ref attack);
+        characterStatistics.LevelUpStatistic(StatisticType.Defense, ref defense);
+        
         DefineTargetXp();
     }
 

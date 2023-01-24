@@ -33,6 +33,12 @@ public enum Growth
     Slow,
 }
 
+public enum StatisticType
+{
+    Attack,
+    Defense,
+    Hp,
+}
 
 public class Statistics
 {
@@ -136,7 +142,7 @@ public class Statistics
         }
     }
     
-    public int RollDice(int rollsNumber, int facesNumber)
+    private int RollDice(int rollsNumber, int facesNumber)
     {
         var count = 0;
         for (var i = 0; i < rollsNumber; i++)
@@ -146,9 +152,21 @@ public class Statistics
 
         return count;
     }
-    
-    
-    
+
+    public void LevelUpStatistic(StatisticType type, ref int targetStatistic)
+    {
+        switch (type) {
+            case StatisticType.Hp:
+                targetStatistic += RollDice(hpRollsNumber, hpFacesNumber);
+                break;
+            case StatisticType.Attack:
+                targetStatistic += RollDice(attackRollsNumber, attackFacesNumber);
+                break;
+            case StatisticType.Defense:
+                targetStatistic += RollDice(defenseRollsNumber, defenseFacesNumber);
+                break;
+        }
+    }
     
    /* case according to each enum in Classes
     void p()
@@ -161,6 +179,5 @@ public class Statistics
             case(int)Classes.Gardien:
                 break;
         }
-        
     } */
 }
