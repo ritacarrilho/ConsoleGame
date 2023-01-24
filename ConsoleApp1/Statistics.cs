@@ -97,12 +97,12 @@ public class Statistics
         
         DefineStatisticsGrowthValues(attackGrowth, ref attackRollsNumber, ref attackFacesNumber);
         DefineStatisticsGrowthValues(defenseGrowth, ref defenseRollsNumber, ref defenseFacesNumber);
+        DefineStatisticsGrowthHealth(hpGrowth, ref hpRollsNumber, ref hpFacesNumber);
     }
 
     // method for defense and attack > same values of growth for fast, medium or slow so the function is reusable
     public void DefineStatisticsGrowthValues(Growth growth, ref int rollsNumber, ref int facesNumber)
     {
-        
         switch (growth)
         {
             case Growth.Fast:
@@ -115,7 +115,25 @@ public class Statistics
                 rollsNumber = 1;
                 break;
         }
-        facesNumber = 2;
+    }
+    
+    public void DefineStatisticsGrowthHealth(Growth growth, ref int rollsNumber, ref int facesNumber)
+    {
+        switch (growth)
+        {
+            case Growth.Fast:
+                rollsNumber = 9;
+                facesNumber = 6;
+                break;
+            case Growth.Medium:
+                rollsNumber = 5;
+                facesNumber = 6;
+                break;
+            case Growth.Slow:
+                rollsNumber = 3;
+                facesNumber = 1;
+                break;
+        }
     }
     
     public int RollDice(int rollsNumber, int facesNumber)
