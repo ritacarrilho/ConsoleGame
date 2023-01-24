@@ -59,27 +59,31 @@ Random rng = new Random();
 List<ConsoleColor> colorArray = new List<ConsoleColor>();
 
 // add colors to color array
-async  void AddColors()
+void AddColors()
 {
-
     for (int i = 0; i < 25; i++)
     {
         var randColor = (ConsoleColor)rng.Next(1, 16);
         colorArray.Add(randColor);
         Console.ForegroundColor = randColor;
-        Console.WriteLine();
     }
 }
+
 
 // display line of alphabet
 void  DisplayLetters()
 {
-    for (var i = 0; i < 26; i++)
+    for (int j = 0; j < 500; j++)
     {
-        AddColors();
-        alphabet.Add((char)('A' + i));
-        Console.Write((alphabet[i]));
-        Console.Clear();
+        for (var i = 0; i < 26; i++)
+        {
+            AddColors();
+            alphabet.Add((char)('A' + i));
+            Console.Write((alphabet[i]));
+        }
+        Console.Write("\r");
+        Thread.Sleep(100);
+
     }
     /* foreach (var element in alphabet)
     {
@@ -89,7 +93,6 @@ void  DisplayLetters()
 }
 
 DisplayLetters();
-
 
 
 /* Correction
