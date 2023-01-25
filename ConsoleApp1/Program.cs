@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using ConsoleApp1;
+﻿using ConsoleApp1;
 
 /* Choisir une class
 1 touche pour level up
@@ -14,6 +13,7 @@ while (true)
     bool isBadClassChoise;
     Classes selectedClass = Classes.Héros;
     Random random = new Random();
+    var map = new Map();
 
     do
     {
@@ -62,11 +62,13 @@ while (true)
     } while (isBadClassChoise);
 
     var hero = new Character(selectedClass, 1, 25, 25, 0,1, 5, 5);
-
+    map.CreateMap();
     // Si ok -> on lance le jeu avec la bonne class
     while (!isReset)
     {
         Console.Clear();
+        
+        map.DisplayMap();
         
         Console.WriteLine(hero.name + 
                           " | Level : " + hero.level +
@@ -93,12 +95,7 @@ while (true)
         var xp = hero.targetXp;
         hero.AddExperience(xp);
     }
-} 
-
-
-
-
-
+}
 
 
 
@@ -148,7 +145,6 @@ Classes StartGame()
     }
     return character;
 }
-
 
 void DisplayInfo()
 {
