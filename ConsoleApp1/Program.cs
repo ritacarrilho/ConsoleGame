@@ -7,7 +7,7 @@
 
 var isRunning = true;
 
-while (true)
+while (isRunning)
 {
     bool isReset = false;
     bool isBadClassChoise;
@@ -62,25 +62,23 @@ while (true)
     } while (isBadClassChoise);
 
     var hero = new Character(selectedClass, 1, 25, 25, 0,1, 5, 5);
+    
     map.CreateMap();
+    map.placeWalls(10, 30);
+    hero.placeRandomlyCharacter(map);
+    
     // Si ok -> on lance le jeu avec la bonne class
     while (!isReset)
     {
         Console.Clear();
         
         map.DisplayMap();
-        
-        Console.WriteLine(hero.name + 
-                          " | Level : " + hero.level +
-                          " | HP : " + hero.maxHp +
-                          " | XP : " + hero.targetXp +
-                          " | ATT : " + hero.attack +
-                          " | DEF : " + hero.defense +
-                          " / " + hero.targetXp
-        );
+        // hero.DisplayCharacter(map);
+
+        hero.displayCharacterHUD();
 
         var keyPressed = Console.ReadKey();
-
+        
         switch (keyPressed.Key)
         {
             case ConsoleKey.R:

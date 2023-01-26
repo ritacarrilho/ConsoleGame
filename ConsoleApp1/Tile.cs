@@ -11,13 +11,15 @@ namespace ConsoleApp1;
 
 public enum TileType {
     Ground,
-    Wall
+    Wall,
+    Heros,
 }
 
 public class Tile
 {
     public int posX;
     public int posY;
+    public TileType type;
     public char sprite;
     public ConsoleColor color;
     public bool isPassable;
@@ -26,6 +28,9 @@ public class Tile
     {
         this.posX = posX;
         this.posY = posY;
+
+        this.type = type;
+        
         switch (type)
         {
             case TileType.Ground:
@@ -38,8 +43,12 @@ public class Tile
                 color = ConsoleColor.DarkBlue;
                 isPassable = false;
                 break;
+            case TileType.Heros:
+                sprite = '@';
+                color = ConsoleColor.Cyan;
+                isPassable = false;
+                break;
         }
-        
     }
 }
 
