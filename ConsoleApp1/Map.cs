@@ -11,7 +11,7 @@ public class Map
     public Map()
     {
         mapWidth = random.Next(10, 50);
-        mapHeight = random.Next(5, 10);
+        mapHeight = random.Next(10, 15);
         map = new Tile[mapWidth, mapHeight];
     }
 

@@ -2,9 +2,8 @@ namespace ConsoleApp1;
 
 public class Character
 {
-    private Classes characterClass;
-    private Statistics characterStatistics;
-    public string name;
+    // private Classes characterClass;
+    private Statistics statistics;
     public int level;
     public int currentHp;
     public int maxHp;
@@ -13,21 +12,64 @@ public class Character
     public int attack;
     public int defense;
     public ConsoleColor color;
-    public int positionX;
-    public int positionY;
+    protected int positionX;
+    protected int positionY;
 
-    public Character(Classes characterClass, int level, int currentHp, int maxHp, int currentXp, int tagetXp, int attack, int defense)
+    public Character(Classes playerClassses, int maxHp, int attack, int defense)
     {
-        this.characterClass = characterClass;
-        name = characterClass.ToString();
-        characterStatistics = new Statistics(this.characterClass);
-        this.level = level;
-        this.currentHp = currentHp;
-        this.maxHp = maxHp;
-        this.currentXp = currentXp;
-        this.targetXp = tagetXp;
+        statistics = new Statistics(playerClassses);
         this.attack = attack;
         this.defense = defense;
+        
+        level = 1;
+        currentHp = maxHp;
+        this.maxHp = maxHp;
+        currentXp = 0;
+        targetXp = 1;
+        positionX = 0;
+        positionY = 0;
+    }
+    
+    public Character(MonsterClasses monsterClass)
+    {
+        statistics = new Statistics(monsterClass);
+        this.attack = attack;
+        this.defense = defense;
+        
+        switch (monsterClass)
+        {
+            case MonsterClasses.Bat:
+                maxHp = 5;
+                currentXp = 2;
+                targetXp = 1;
+                break;
+            case MonsterClasses.Goblin:
+                maxHp = 8;
+                currentXp = 2;
+                targetXp = 2;
+                break;
+            case MonsterClasses.Gollum:
+                maxHp = 10;
+                currentXp = 1;
+                targetXp = 3;
+                break;
+            case MonsterClasses.Orc:
+                maxHp = 6;
+                currentXp = 2;
+                targetXp = 4;
+                break;
+            case MonsterClasses.Troll:
+                maxHp = 3;
+                currentXp = 1;
+                targetXp = 3;
+                break;
+        }
+        
+        level = 1;
+        currentHp = maxHp;
+        this.maxHp = maxHp;
+        currentXp = 0;
+        targetXp = 1;
         positionX = 0;
         positionY = 0;
     }
@@ -38,26 +80,29 @@ public class Character
         currentHp = Math.Min(currentHp + value, maxHp);
     }
 
+    
     public void RestoreHp()
     {
         currentHp = maxHp;
     }
 
-    public void DefineTargetXp()
+    
+    private void DefineTargetXp()
     {
         targetXp = (int)Math.Round(4 * (Math.Pow(level, 3) / 5));
     }
     
+    
     public void LevelUp()
     {
         level += 1;
-        characterStatistics.LevelUpStatistic(StatisticType.Hp, ref maxHp);
+        statistics.LevelUpStatistic(StatisticType.Hp, ref maxHp);
         RestoreHp();
-        characterStatistics.LevelUpStatistic(StatisticType.Attack, ref attack);
-        characterStatistics.LevelUpStatistic(StatisticType.Defense, ref defense);
+        statistics.LevelUpStatistic(StatisticType.Attack, ref attack);
+        statistics.LevelUpStatistic(StatisticType.Defense, ref defense);
         
         DefineTargetXp();
-    }
+    } 
 
     public void AddExperience(int value)
     {
@@ -71,83 +116,17 @@ public class Character
     }
     
     
-    public void placeRandomlyCharacter(Map map)
+    public void Move(Map map, int xDirection, int yDirection)
     {
-        var random = new Random();
-        var isPlaced = false;
-        
-        while (!isPlaced)
+        var futureTile = map.map[positionX + xDirection, positionY + yDirection];
+        switch (futureTile.type)
         {
-            var x = random.Next(0, map.mapWidth);
-            var y = random.Next(0, map.mapHeight);
-            
-            if (map.map[x, y].type == TileType.Ground)
-            {
-                positionX = x;
-                positionY = y;
-
-                map.map[x, y] = new Tile(x, y, TileType.Heros);
-                isPlaced = true;
-            }
+            case TileType.Ground:
+                map.map[positionX + xDirection, positionY + yDirection] = new Tile(positionX - 1, positionY, TileType.Heros);
+                map.map[positionX, positionY] = new Tile(positionX, positionY, TileType.Ground);
+                positionX += xDirection;
+                positionY += yDirection;
+                break;
         }
-    }
-
-    
-    public void displayCharacterHUD()
-    {
-        var hudLength = (" " + name + 
-                        " ║ Level : " + level +
-                        " ║ HP : " + currentHp + " / " + maxHp   +
-                        " ║ XP : " + currentXp + " / " + targetXp +
-                        " ║ ATT : " + attack +
-                        " ║ DEF : " + defense  + " "
-            ).Length;
-        
-        Console.ForegroundColor = ConsoleColor.Gray;
-        Console.Write("╔");
-
-        for (var i = 0; i < hudLength; i++)
-        {
-            Console.Write("═");
-        }
-        Console.Write("╗");
-
-        Console.WriteLine();
-        
-        Console.Write("║ ");
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.Write(name);
-        Console.ForegroundColor = ConsoleColor.Gray;
-        Console.Write(" ║ ");
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.Write("Level : " + level);
-        Console.ForegroundColor = ConsoleColor.Gray;
-        Console.Write(" ║ ");
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.Write("HP : " + currentHp + " / " + maxHp);
-        Console.ForegroundColor = ConsoleColor.Gray;
-        Console.Write(" ║ ");
-        Console.ForegroundColor = ConsoleColor.Magenta;
-        Console.Write("XP : " + currentXp + " / " + targetXp);
-        Console.ForegroundColor = ConsoleColor.Gray;
-        Console.Write(" ║ ");
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.Write("ATT : " + attack);
-        Console.ForegroundColor = ConsoleColor.Gray;
-        Console.Write(" ║ ");
-        Console.ForegroundColor = ConsoleColor.Blue;
-        Console.Write("DEF : " + defense );
-        Console.ForegroundColor = ConsoleColor.Gray;
-        Console.Write(" ║");
-        
-        Console.WriteLine();
-        Console.Write("╚");
-        
-        for (var i = 0; i < hudLength; i++)
-        {
-            Console.Write("═");
-        }
-        
-        Console.Write("╝");
     }
 }

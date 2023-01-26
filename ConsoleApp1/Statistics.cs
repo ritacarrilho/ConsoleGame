@@ -40,9 +40,19 @@ public enum StatisticType
     Hp,
 }
 
+public enum MonsterClasses
+{
+    Bat,
+    Goblin,
+    Troll,
+    Orc,
+    Gollum,
+}
+
 public class Statistics
 {
-    private Classes characterClass;
+    private Classes playerClass;
+    private MonsterClasses monsterClass;
     private Random random = new Random();
 
     private Growth attackGrowth;
@@ -58,11 +68,11 @@ public class Statistics
     private int hpFacesNumber;
     
 
-    public Statistics(Classes characterClass)
+    public Statistics(Classes playerClass)
     {
-        this.characterClass = characterClass;
+        this.playerClass = playerClass;
 
-        switch (characterClass)
+        switch (playerClass)
         {
             case Classes.Berserker:
                 attackGrowth = Growth.Fast;
@@ -105,6 +115,40 @@ public class Statistics
         DefineStatisticsGrowthValues(defenseGrowth, ref defenseRollsNumber, ref defenseFacesNumber);
         DefineStatisticsGrowthHealth(hpGrowth, ref hpRollsNumber, ref hpFacesNumber);
     }
+    
+    public Statistics(MonsterClasses monsterClass)
+    {
+        this.monsterClass = monsterClass;
+
+        switch (monsterClass)
+        {
+            case MonsterClasses.Troll:
+                attackGrowth = Growth.Fast;
+                defenseGrowth = Growth.Slow;
+                hpGrowth = Growth.Medium;
+                break;
+            case MonsterClasses.Gollum:
+                attackGrowth = Growth.Slow;
+                defenseGrowth = Growth.Fast;
+                hpGrowth = Growth.Medium;
+                break;
+            case MonsterClasses.Orc:
+                attackGrowth = Growth.Medium;
+                defenseGrowth = Growth.Slow;
+                hpGrowth = Growth.Fast;
+                break;
+            case MonsterClasses.Bat:
+                attackGrowth = Growth.Slow;
+                defenseGrowth = Growth.Medium;
+                hpGrowth = Growth.Fast;
+                break;
+        }
+        
+        DefineStatisticsGrowthValues(attackGrowth, ref attackRollsNumber, ref attackFacesNumber);
+        DefineStatisticsGrowthValues(defenseGrowth, ref defenseRollsNumber, ref defenseFacesNumber);
+        DefineStatisticsGrowthHealth(hpGrowth, ref hpRollsNumber, ref hpFacesNumber);
+    }
+
 
     // method for defense and attack > same values of growth for fast, medium or slow so the function is reusable
     public void DefineStatisticsGrowthValues(Growth growth, ref int rollsNumber, ref int facesNumber)
@@ -167,17 +211,4 @@ public class Statistics
                 break;
         }
     }
-    
-   /* case according to each enum in Classes
-    void p()
-    {
-        int index = 0;
-        switch (index)
-        {
-            case (int)Classes.Berserker:
-                break;
-            case(int)Classes.Gardien:
-                break;
-        }
-    } */
 }
